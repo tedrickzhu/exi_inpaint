@@ -16,4 +16,6 @@ temp_*/
 temp/
 restore/
 examples/
+files/
+imgs/
 imagenet-vgg-verydeep-19.mat

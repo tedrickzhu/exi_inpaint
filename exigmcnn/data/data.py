@@ -10,7 +10,8 @@ class DataLoader:
         
         self.im_size = im_size
         self.batch_size = batch_size
-        self.data_queue = None
+        self.dataimg_queue = None
+        self.dataeximg_queue = None
 
     def next(self):
         with tf.variable_scope('feed'):

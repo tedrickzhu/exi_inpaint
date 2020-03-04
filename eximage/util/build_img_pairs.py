@@ -15,47 +15,52 @@ def buildimgpairs(dataset,colorIndexPath,structureIndexPath,imgfilepath,eximgfil
 	filelist = glob.glob(dataset + "*.png")
 	totalnums = len(filelist)
 	count = 0
-	with open(imgfilepath, "w") as imgfile:
-		with open(eximgfilepath,'w') as eximgfile:
-		# # 匹配结果存储
-			for imagePath in :
-				imageName = imagePath.split("/")[-1].split(".")[0]
-				imageSearcher = searcher.Searcher(colorIndexPath, structureIndexPath)
-				queryFeatures = None
-				queryStructures = None
+	with open('./imgandeximg.txt','a+') as imgandeximg:
+		with open(imgfilepath, "a+") as imgfile:
+			with open(eximgfilepath,'a+') as eximgfile:
+			# # 匹配结果存储
+				for imagePath in :
+					imageName = imagePath.split("/")[-1].split(".")[0]
+					imageSearcher = searcher.Searcher(colorIndexPath, structureIndexPath)
+					queryFeatures = None
+					queryStructures = None
 
-				idealBins = (8, 12, 3)
-				idealDimension = (16, 16)
+					idealBins = (8, 12, 3)
+					idealDimension = (16, 16)
 
-				# 传入色彩空间的bins
-				colorDescriptor = colordescriptor.ColorDescriptor(idealBins)
-				# 传入构图空间的bins
-				structureDescriptor = structuredescriptor.StructureDescriptor(idealDimension)
-				queryImage = cv2.imread(imagePath)
-				queryFeatures = colorDescriptor.describe(queryImage)
-				queryStructures = structureDescriptor.describe(queryImage)
-				###########################################
-				#检索
-				searchResults = imageSearcher.search(queryFeatures, queryStructures)
-				respairs = []
-				for resimgname, score in searchResults:
-					if resimgname!=imageName:
-						respairs.append(resimgname)
-				# 将匹配结果写入到csv文件中去
-				imgfile.write(str(imagePath))
-				imgfile.write('\r\n')
+					# 传入色彩空间的bins
+					colorDescriptor = colordescriptor.ColorDescriptor(idealBins)
+					# 传入构图空间的bins
+					structureDescriptor = structuredescriptor.StructureDescriptor(idealDimension)
+					queryImage = cv2.imread(imagePath)
+					queryFeatures = colorDescriptor.describe(queryImage)
+					queryStructures = structureDescriptor.describe(queryImage)
+					###########################################
+					#检索
+					searchResults = imageSearcher.search(queryFeatures, queryStructures)
+					respairs = []
+					for resimgname, score in searchResults:
+						if resimgname!=imageName:
+							respairs.append(resimgname)
+					# 将匹配结果写入到csv文件中去
+					imgfile.write(str(imagePath))
+					imgfile.write('\r\n')
 
-				eximgfile.write(str(join(fdbdir,respairs[0]+'.png')))
-				eximgfile.write('\r\n')
+					eximgfile.write(str(join(fdbdir,respairs[0]+'.png')))
+					eximgfile.write('\r\n')
 
-				count+=1
-				if count%100==0:
-					print('pair img and eximg:',count,'/',totalnums)
+					imgandeximg.write(str(imagePath)+','+str(join(fdbdir,respairs[0]+'.png')))
+					imgandeximg.write('\r\n')
 
-			eximgfile.close()
-	# close index file
-	imgfile.close()
-	print('pair img and eximg DONE======', count, '/', totalnums)
+					count+=1
+					if count%100==0:
+						print('pair img and eximg:',count,'/',totalnums)
+
+				eximgfile.close()
+		# close index file
+		imgfile.close()
+		print('pair img and eximg DONE======', count, '/', totalnums)
+	imgandeximg.close()
 
 if __name__ == '__main__':
 	dataset = '/home/zzy/TrainData/MITPlace2Dataset/val_recut_512x680/'
