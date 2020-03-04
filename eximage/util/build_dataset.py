@@ -25,6 +25,8 @@ def recutimage(basepath,baserecutpath,readnums=0):
 		filepath = os.path.join(basepath,filename)
 		if not os.path.isfile(filepath):
 			print("break,no such file ,",filepath)
+			print('readindx:', readindex)
+			print('writeindex:', writeindex)
 			break
 		# print(filepath)
 		image = cv2.imread(filepath)
@@ -108,8 +110,11 @@ def recutimage(basepath,baserecutpath,readnums=0):
 
 		if writeindex-precount>500:
 			precount=writeindex
-			print('have read source images numbers:',readindex)
-			print('have written recutted image numbers:',writeindex)
+			print('readindex:',readindex)
+			print('writeindex:',writeindex)
+	print('======recut images finished======')
+	print('have read source images numbers:', readindex)
+	print('have written recutted image numbers:', writeindex)
 
 def create_mask(imgshap,whitesize,outputpath):
 	h,w = imgshap[0],imgshap[1]
