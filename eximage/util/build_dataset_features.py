@@ -13,33 +13,44 @@ import cv2
 def buildfeaturesdb(dataset,colorfeas,strucfeas):
 	idealBins = (8, 12, 3)
 	colorDesriptor = ColorDescriptor(idealBins)
-
+	filelist = glob.glob(dataset + "*.png")
+	count = 0
+	totalnums = len(filelist)
 	with open(colorfeas, "w") as output:
 		# 色彩空间的特征存储
-		for imagePath in glob.glob(dataset + "*.png"):
+		for imagePath in filelist:
 			imageName = imagePath.split("/")[-1].split(".")[0]
 			image = cv2.imread(imagePath)
 			features = colorDesriptor.describe(image)
 			# 将色彩空间的特征写入到csv文件中去
 			features = [str(feature).replace("\n", "") for feature in features]
 			output.write("%s,%s\n" % (imageName, ",".join(features)))
+			count+=1
+			if count%500==0:
+				print('write color features to csv file:',count,'/',totalnums)
 		# close index file
 	output.close()
+	print('write color features to csv file. DONE===', count, '/', totalnums)
+	count = 0
 
 	idealDimension = (16, 16)
 	structureDescriptor = StructureDescriptor(idealDimension)
 
 	with open(strucfeas, "w") as output:
 		# 构图空间的色彩特征存储
-		for imagePath in glob.glob(dataset + "*.png"):
+		for imagePath in filelist:
 			imageName = imagePath.split("/")[-1].split(".")[0]
 			image = cv2.imread(imagePath)
 			structures = structureDescriptor.describe(image)
 			# 将构图空间的色彩特征写入到文件中去  write structures to file
 			structures = [str(structure).replace("\n", "") for structure in structures]
 			output.write("%s,%s\n" % (imageName, ",".join(structures)))
+			count+=1
+			if count%500==0:
+				print('write structure features to csv file:',count,'/',totalnums)
 		# close index file
 	output.close()
+	print('write structure features to csv file. DONE===', count, '/', totalnums)
 
 if __name__ == '__main__':
 	dataset = '/home/zzy/TrainData/MITPlace2Dataset/val_recut_512x680/'

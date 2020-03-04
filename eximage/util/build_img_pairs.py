@@ -12,10 +12,13 @@ import glob
 def buildimgpairs(dataset,colorIndexPath,structureIndexPath,imgfilepath,eximgfilepath,fdbdir=None):
 	if fdbdir is None:
 		fdbdir = dataset
+	filelist = glob.glob(dataset + "*.png")
+	totalnums = len(filelist)
+	count = 0
 	with open(imgfilepath, "w") as imgfile:
 		with open(eximgfilepath,'w') as eximgfile:
 		# # 匹配结果存储
-			for imagePath in glob.glob(dataset + "*.png"):
+			for imagePath in :
 				imageName = imagePath.split("/")[-1].split(".")[0]
 				imageSearcher = searcher.Searcher(colorIndexPath, structureIndexPath)
 				queryFeatures = None
@@ -45,9 +48,14 @@ def buildimgpairs(dataset,colorIndexPath,structureIndexPath,imgfilepath,eximgfil
 				eximgfile.write(str(join(fdbdir,respairs[0]+'.png')))
 				eximgfile.write('\r\n')
 
+				count+=1
+				if count%100==0:
+					print('pair img and eximg:',count,'/',totalnums)
+
 			eximgfile.close()
 	# close index file
 	imgfile.close()
+	print('pair img and eximg DONE======', count, '/', totalnums)
 
 if __name__ == '__main__':
 	dataset = '/home/zzy/TrainData/MITPlace2Dataset/val_recut_512x680/'
