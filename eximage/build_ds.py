@@ -9,7 +9,7 @@ if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--dataset', default='', type=str,help='The dir of images to be recutted.')
 	parser.add_argument('--recutdir', default='', type=str,help='The saved dir of recutted images.')
-	parser.add_argument('--neednums', default=10, type=int,help='The total numbers of recutted images.')
+	parser.add_argument('--neednums', default=0, type=int,help='The total numbers of recutted images.')
 	args = parser.parse_args()
 	 
 	recutimage(args.dataset,args.recutdir,args.neednums)

@@ -10,10 +10,10 @@ this method is only use for MIT place2 dataset val_large sub-dataset
 you can change it use glob to make it as a common method
 '''
 def recutimage(basepath,baserecutpath,neednums):
-	if neednums ==-1:
-		imagenum = 10000000
-	else:
+	if neednums:
 		imagenum = neednums
+	else:
+		imagenum = 10000000
 	if not os.path.exists(baserecutpath):
 		os.mkdir(baserecutpath)
 	writeindex = 1
