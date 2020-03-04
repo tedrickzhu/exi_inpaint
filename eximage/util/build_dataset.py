@@ -9,7 +9,7 @@ import numpy as np
 this method is only use for MIT place2 dataset val_large sub-dataset
 you can change it use glob to make it as a common method
 '''
-def recutimage(basepath,baserecutpath,neednums):
+def recutimage(basepath,baserecutpath,neednums=0):
 	if neednums:
 		imagenum = neednums
 	else:
@@ -18,6 +18,8 @@ def recutimage(basepath,baserecutpath,neednums):
 		os.mkdir(baserecutpath)
 	writeindex = 1
 	for readindex in range(1,imagenum+1):
+		# if readindex != 527:
+		# 	continue
 		if writeindex > imagenum:
 			break
 		filename = 'Places365_val_'+str(readindex).zfill(8)+'.jpg'
@@ -25,6 +27,7 @@ def recutimage(basepath,baserecutpath,neednums):
 		if not os.path.isfile(filepath):
 			print("break,no such file ,",filepath)
 			break
+		# print(filepath)
 		image = cv2.imread(filepath)
 		h,w,c = image.shape
 		rate = 512.0/680.0
@@ -85,7 +88,7 @@ def recutimage(basepath,baserecutpath,neednums):
 				filepath = os.path.join(baserecutpath, filename)
 				cv2.imwrite(filepath, image_new)
 				writeindex += 1
-				w_new_s = int(w-w * 1.3)
+				w_new_s = int(w-w_new * 1.3)
 				image_new = image[:, w_new_s:(w_new_s + w_new), :]
 				image_new = cv2.resize(image_new, (680, 512))
 				filename = 'Places365_' + str(writeindex).zfill(8) + '.png'
@@ -117,9 +120,9 @@ def create_mask(imgshap,whitesize,outputpath):
 
 
 if __name__ == '__main__':
-	basepath = '/home/zzy/TrainData/MITPlace2Dataset/val_large_65'
-	baserecutpath = '/home/zzy/TrainData/MITPlace2Dataset/val_recut_512x680/'
-	recutimage(basepath,baserecutpath,200)
+	basepath = '/home/zzy/TrainData/MITPlace2Dataset/val_large'
+	baserecutpath = '/home/zzy/TrainData/MITPlace2Dataset/test/'
+	recutimage(basepath,baserecutpath)
 	# imgshap = (512,680)
 	# for whitesize in [100,128,200]:
 	# 	outputpath = './center_mask_512x680_'+str(whitesize)+'.png'
