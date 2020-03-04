@@ -13,7 +13,7 @@ python build_ds.py --dataset /home/zhengyi_zhu/TrainData/MITPlace2Dataset/val_la
 为数据集建立特征库
 python build_ds_f.py --dataset /home/zhengyi_zhu/TrainData/MITPlace2Dataset/base5000recut/ --colorf /home/zhengyi_zhu/exi_inpaint/eximage/files/colorfeatures.csv --structf /home/zhengyi_zhu/exi_inpaint/eximage/files/structfeaturs.csv
 
-相似图片配对
+相似图片配对,生成存储文件路径的TXT
 python build_img_p.py --dataset /home/zhengyi_zhu/TrainData/MITPlace2Dataset/base5000recut/ --colorf /home/zhengyi_zhu/exi_inpaint/eximage/files/colorfeatures.csv --structf /home/zhengyi_zhu/exi_inpaint/eximage/files/structfeaturs.csv --imgfile /home/zhengyi_zhu/exi_inpaint/eximage/files/imgfile.txt --eximgfile /home/zhengyi_zhu/exi_inpaint/eximage/files/eximgfile.txt
 
 

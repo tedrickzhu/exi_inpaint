@@ -1,10 +1,11 @@
 import tensorflow as tf
 
 class DataLoader:
-    def __init__(self, filename, im_size, batch_size):
-        self.filelist = open(filename, 'rt').read().splitlines()
-        
-        if not self.filelist:
+    def __init__(self, imgfilepath,eximgfilepath, im_size, batch_size):
+        self.imgfilelist = open(imgfilepath, 'rt').read().splitlines()
+        self.eximgfilelist = open(eximgfilepath, 'rt').read().splitlines()
+
+        if not self.imgfilelist:
             exit('\nError: file list is empty\n')
         
         self.im_size = im_size

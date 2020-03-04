@@ -14,7 +14,7 @@ model = GMCNNModel()
 
 # training data
 # print(config.img_shapes)
-dataLoader = DataLoader(filename=config.dataset_path, batch_size=config.batch_size,
+dataLoader = DataLoader(imgfilepath=config.data_imgfile,eximgfilepath=config.data_eximgfile, batch_size=config.batch_size,
                         im_size=config.img_shapes)
 images,eximgs = dataLoader.next()
 g_vars, d_vars, losses = model.build_net(images, eximgs, config=config)
