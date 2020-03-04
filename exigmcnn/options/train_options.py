@@ -19,7 +19,7 @@ class TrainOptions:
 
     def initialize(self):
         self.parser.add_argument('--dataset', type=str, default='places2', help='The dataset of the experiment.')
-        self.parser.add_argument('--data_file', type=str, default='/home/zzy/work/exi_inpaint/places2_512x680_file.txt', help='the file storing training file paths')
+        self.parser.add_argument('--data_file', type=str, default='/home/zzy/work/exi_inpaint/eximage/files/places2_512x680_file.txt', help='the file storing training file paths')
         self.parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0')
         self.parser.add_argument('--checkpoints_dir', type=str, default='./checkpoints', help='models are saved here')
         self.parser.add_argument('--load_model_dir', type=str, default='', help='pretrained models are given here')
@@ -43,7 +43,7 @@ class TrainOptions:
         self.parser.add_argument('--max_iters', type=int, default=40000)
         self.parser.add_argument('--viz_steps', type=int, default=5)
 
-        self.parser.add_argument('--img_shapes', type=str, default='256,256,3',
+        self.parser.add_argument('--img_shapes', type=str, default='512,680,3',
                                  help='given shape parameters: h,w,c or h,w')
         self.parser.add_argument('--mask_shapes', type=str, default='128,128',
                                  help='given mask parameters: h,w')

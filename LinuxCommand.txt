@@ -8,4 +8,4 @@ find -type f -name "*.png" |wc -l
 find -type d|wc -l
 
 裁剪places2数据集，生成新数据集
-python build_ds.py --dataset /home/zhengyi_zhu/TrainData/MITPlace2Dataset/val_large/ --recutdir /home/zhengyi_zhu/TrainData/MITPlace2Dataset/val_recut/
+python build_ds.py --dataset /home/zhengyi_zhu/TrainData/MITPlace2Dataset/val_large/ --recutdir /home/zhengyi_zhu/TrainData/MITPlace2Dataset/base5000recut/ --readnums 5000

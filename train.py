@@ -16,8 +16,8 @@ model = GMCNNModel()
 # print(config.img_shapes)
 dataLoader = DataLoader(filename=config.dataset_path, batch_size=config.batch_size,
                         im_size=config.img_shapes)
-images = dataLoader.next()
-g_vars, d_vars, losses = model.build_net(images, config=config)
+images,eximgs = dataLoader.next()
+g_vars, d_vars, losses = model.build_net(images, eximgs, config=config)
 
 lr = tf.get_variable(
     'lr', shape=[], trainable=False,
