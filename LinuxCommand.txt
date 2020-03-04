@@ -1,0 +1,8 @@
+统计当前目录下文件的数量
+find -type f |wc -l
+指定格式
+find -type f -name "*.jpg" |wc -l
+find -type f -name "*.png" |wc -l
+
+统计目录
+find -type d|wc -l

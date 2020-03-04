@@ -9,7 +9,11 @@ import numpy as np
 this method is only use for MIT place2 dataset val_large sub-dataset
 you can change it use glob to make it as a common method
 '''
-def recutimage(basepath,baserecutpath,imagenum):
+def recutimage(basepath,baserecutpath,neednums):
+	if neednums ==-1:
+		imagenum = 10000000
+	else:
+		imagenum = neednums
 	if not os.path.exists(baserecutpath):
 		os.mkdir(baserecutpath)
 	writeindex = 1
@@ -19,6 +23,7 @@ def recutimage(basepath,baserecutpath,imagenum):
 		filename = 'Places365_val_'+str(readindex).zfill(8)+'.jpg'
 		filepath = os.path.join(basepath,filename)
 		if not os.path.isfile(filepath):
+			print("break,no such file ,",filepath)
 			break
 		image = cv2.imread(filepath)
 		h,w,c = image.shape
@@ -99,7 +104,7 @@ def recutimage(basepath,baserecutpath,imagenum):
 			cv2.imwrite(filepath, image_new)
 			writeindex += 1
 
-		if writeindex%50==0:
+		if writeindex%100==0:
 			print('have written recutted image numbers:',writeindex)
 
 def create_mask(imgshap,whitesize,outputpath):
