@@ -19,7 +19,7 @@ def buildimgpairs(dataset,colorIndexPath,structureIndexPath,imgfilepath,eximgfil
 		with open(imgfilepath, "a+") as imgfile:
 			with open(eximgfilepath,'a+') as eximgfile:
 			# # 匹配结果存储
-				for imagePath in :
+				for imagePath in filelist:
 					imageName = imagePath.split("/")[-1].split(".")[0]
 					imageSearcher = searcher.Searcher(colorIndexPath, structureIndexPath)
 					queryFeatures = None
