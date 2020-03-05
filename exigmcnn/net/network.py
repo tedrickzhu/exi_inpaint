@@ -17,22 +17,25 @@ class GMCNNModel:
         self.conv3 = partial(tf.layers.conv2d, kernel_size=3, activation=tf.nn.elu, padding='SAME')
         self.conv5_ds = partial(tf.layers.conv2d, kernel_size=5, strides=2, activation=tf.nn.leaky_relu, padding='SAME')
 
-    def build_generator(self, x, mask, reuse=False, name='inpaint_net'):
+    def build_generator(self, x,ex, mask, reuse=False, name='inpaint_net'):
         xshape = x.get_shape().as_list()
         xh, xw = xshape[1], xshape[2]
         ones_x = tf.ones_like(x)[:, :, :, 0:1]
-        x_w_mask = tf.concat([x, ones_x, ones_x * mask], axis=3)
+        ones_ex = tf.ones_like(x)[:, :, :, 0:1]
+        # x_w_mask = tf.concat([x, ones_x, ones_x * mask], axis=3)
+        x_w_ex_exw_mask = tf.concat([x, ones_x, ex, ones_ex, ones_x * mask], axis=3)
 
         # network with three branches
         cnum = self.config.g_cnum
-        b_names = ['b1', 'b2', 'b3', 'merge']
+        b_names = ['b1', 'b2', 'b3', 'b4', 'merge']
 
         conv_7 = self.conv7
         conv_5 = self.conv5
         conv_3 = self.conv3
         with tf.variable_scope(name, reuse=reuse):
             # branch 1
-            x = conv_7(inputs=x_w_mask, filters=cnum, strides=1, name=b_names[0] + 'conv1')
+            # x = conv_7(inputs=x_w_mask, filters=cnum, strides=1, name=b_names[0] + 'conv1')
+            x = conv_7(inputs=x_w_ex_exw_mask, filters=cnum, strides=1, name=b_names[0] + 'conv1')
             x = conv_7(inputs=x, filters=2*cnum, strides=2, name=b_names[0] + 'conv2_downsample')
             x = conv_7(inputs=x, filters=2*cnum, strides=1, name=b_names[0] + 'conv3')
             x = conv_7(inputs=x, filters=4*cnum, strides=2, name=b_names[0] + 'conv4_downsample')
@@ -49,7 +52,8 @@ class GMCNNModel:
             x_b1 = tf.image.resize_bilinear(x, [xh, xw], align_corners=True)
 
             # branch 2
-            x = conv_5(inputs=x_w_mask, filters=cnum, strides=1, name=b_names[1] + 'conv1')
+            # x = conv_5(inputs=x_w_mask, filters=cnum, strides=1, name=b_names[1] + 'conv1')
+            x = conv_5(inputs=x_w_ex_exw_mask, filters=cnum, strides=1, name=b_names[1] + 'conv1')
             x = conv_5(inputs=x, filters=2 * cnum, strides=2, name=b_names[1] + 'conv2_downsample')
             x = conv_5(inputs=x, filters=2 * cnum, strides=1, name=b_names[1] + 'conv3')
             x = conv_5(inputs=x, filters=4 * cnum, strides=2, name=b_names[1] + 'conv4_downsample')
@@ -70,7 +74,8 @@ class GMCNNModel:
             x_b2 = tf.image.resize_bilinear(x, [xh, xw], align_corners=True)
 
             # branch 3
-            x = conv_5(inputs=x_w_mask, filters=cnum, strides=1, name=b_names[2] + 'conv1')
+            # x = conv_5(inputs=x_w_mask, filters=cnum, strides=1, name=b_names[2] + 'conv1')
+            x = conv_5(inputs=x_w_ex_exw_mask, filters=cnum, strides=1, name=b_names[2] + 'conv1')
             x = conv_3(inputs=x, filters=2 * cnum, strides=2, name=b_names[2] + 'conv2_downsample')
             x = conv_3(inputs=x, filters=2 * cnum, strides=1, name=b_names[2] + 'conv3')
             x = conv_3(inputs=x, filters=4 * cnum, strides=2, name=b_names[2] + 'conv4_downsample')
@@ -93,11 +98,37 @@ class GMCNNModel:
                 x = conv_3(inputs=x, filters=cnum, strides=1, name=b_names[2] + 'conv15_upsample_conv')
             x_b3 = conv_3(inputs=x, filters=cnum//2, strides=1, name=b_names[2] + 'conv16')
 
-            x_merge = tf.concat([x_b1, x_b2, x_b3], axis=3)
+            # branch 4
+            # x = conv_5(inputs=x_w_mask, filters=cnum, strides=1, name=b_names[1] + 'conv1')
+            x = conv_5(inputs=x_w_ex_exw_mask, filters=cnum, strides=1, name=b_names[3] + 'conv1')
+            x = conv_5(inputs=x, filters=2 * cnum, strides=2, name=b_names[3] + 'conv2_downsample')
+            x = conv_5(inputs=x, filters=2 * cnum, strides=1, name=b_names[3] + 'conv3')
+            x = conv_5(inputs=x, filters=4 * cnum, strides=2, name=b_names[3] + 'conv4_downsample')
+            x = conv_5(inputs=x, filters=4 * cnum, strides=1, name=b_names[3] + 'conv5')
+            x = conv_5(inputs=x, filters=4 * cnum, strides=1, name=b_names[3] + 'conv6')
+            x = conv_5(inputs=x, filters=4 * cnum, strides=1, dilation_rate=2, name=b_names[3] + 'conv7_atrous')
+            x = conv_5(inputs=x, filters=4 * cnum, strides=1, dilation_rate=4, name=b_names[3] + 'conv8_atrous')
+            x = conv_5(inputs=x, filters=4 * cnum, strides=1, dilation_rate=8, name=b_names[3] + 'conv9_atrous')
+            x = conv_5(inputs=x, filters=4 * cnum, strides=1, dilation_rate=16, name=b_names[3] + 'conv10_atrous')
+            if cnum > 32:
+                x = conv_5(inputs=x, filters=4 * cnum, strides=1, dilation_rate=32, name=b_names[3] + 'conv11_atrous')
+            x = conv_5(inputs=x, filters=4 * cnum, strides=1, name=b_names[3] + 'conv11')
+            x = conv_5(inputs=x, filters=4 * cnum, strides=1, name=b_names[3] + 'conv12')
+            x = tf.image.resize_nearest_neighbor(x, [xh // 2, xw // 2], align_corners=True)
+            with tf.variable_scope(b_names[3] + 'conv13_upsample'):
+                x = conv_3(inputs=x, filters=2 * cnum, strides=1, name=b_names[3] + 'conv13_upsample_conv')
+            x = conv_3(inputs=x, filters=2 * cnum, strides=1, name=b_names[3] + 'conv14')
+            x = tf.image.resize_nearest_neighbor(x, [xh, xw], align_corners=True)
+            with tf.variable_scope(b_names[3] + 'conv15_upsample'):
+                x = conv_3(inputs=x, filters=cnum, strides=1, name=b_names[3] + 'conv15_upsample_conv')
+            x_b4 = conv_3(inputs=x, filters=cnum // 2, strides=1, name=b_names[3] + 'conv16')
 
-            x = conv_3(inputs=x_merge, filters=cnum // 2, strides=1, name=b_names[3] + 'conv17')
+
+            x_merge = tf.concat([x_b1, x_b2, x_b3, x_b4], axis=3)
+
+            x = conv_3(inputs=x_merge, filters=cnum // 2, strides=1, name=b_names[4] + 'conv17')
             x = tf.layers.conv2d(inputs=x, kernel_size=3, filters=3, strides=1, activation=None, padding='SAME',
-                                 name=b_names[3] + 'conv18')
+                                 name=b_names[4] + 'conv18')
             x = tf.clip_by_value(x, -1., 1.)
         return x
 
@@ -164,9 +195,11 @@ class GMCNNModel:
             dout_local, mask_local = self.wgan_patch_discriminator(batch_global, mask, d_cnum, reuse=reuse)
         return dout_local, dout_global, mask_local
 
-    def build_net(self, batch_data, config, summary=True, reuse=False):
+    def build_net(self, batch_imgdata, batch_eximgdata, config, summary=True, reuse=False):
         self.config = config
-        batch_pos = batch_data / 127.5 - 1.
+        #normalize pixel value from [0.0, 255.0] to [-1.0, 1.0]
+        batch_pos = batch_imgdata / 127.5 - 1.
+        batch_expos = batch_eximgdata / 127.5 - 1.
         # generate mask, 1 represents masked point
         if config.mask_type == 'rect':
             bbox = random_bbox(config)
@@ -176,7 +209,7 @@ class GMCNNModel:
                                      maxBrushWidth=20, maxLength=80, maxVertex=16)
         batch_incomplete = batch_pos * (1. - mask)
         mask_priority = priority_loss_mask(mask)
-        batch_predicted = self.build_generator(batch_incomplete, mask, reuse=reuse)
+        batch_predicted = self.build_generator(batch_incomplete, batch_expos, mask, reuse=reuse)
 
         losses = {}
         # apply mask and complete image
