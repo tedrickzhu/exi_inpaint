@@ -93,10 +93,20 @@ class Searcher:
 	def search(self, queryFeatures, rawQueryStructures, limit=3):
 		featureResults = self.searchByColor(queryFeatures)
 		structureResults = self.searchByStructure(rawQueryStructures)
-		results = {}
+		resultsdict = {}
 		for key, value in featureResults.items():
-			results[key] = value + structureResults[key]
+			resultsdict[key] = value + structureResults[key]
 
-		results = sorted(results.items(), key=lambda item: item[1], reverse=False)
+		# results = sorted(resultsdict.items(), key=lambda item: item[1], reverse=False)
+		results = []
+		for circle in range(limit):
+			maxscore = None
+			maxscorekey = None
+			for key,score in resultsdict.items():
+				if (maxscore is None) or (score>maxscore):
+					maxscore = score
+					maxscorekey = key
+			results.append([maxscorekey,maxscore])
+			resultsdict.pop(maxscorekey)
 
-		return results[: limit]
+		return results

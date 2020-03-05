@@ -53,9 +53,9 @@ def buildfeaturesdb(dataset,colorfeas,strucfeas):
 	print('write structure features to csv file. DONE===', count, '/', totalnums)
 
 if __name__ == '__main__':
-	dataset = '/home/zzy/TrainData/MITPlace2Dataset/val_recut_512x680/'
+	dataset = '/home/zzy/TrainData/MITPlace2Dataset/base500recut/'
 	# dataset = "/home/zzy/TrainData/HolidaySet/"
-	colorfeas = "/home/zzy/work/experiment_image_inpaint/searcher/colorfeatures.csv"
-	strucfeas = "/home/zzy/work/experiment_image_inpaint/searcher/strucfeatures.csv"
+	colorfeas = "/home/zzy/work/exi_inpaint/eximage/files/b500colorfeatures.csv"
+	strucfeas = "/home/zzy/work/exi_inpaint/eximage/files/b500strucfeatures.csv"
 	buildfeaturesdb(dataset, colorfeas, strucfeas)
 	print('build features file done.')

@@ -127,8 +127,8 @@ def create_mask(imgshap,whitesize,outputpath):
 
 if __name__ == '__main__':
 	basepath = '/home/zzy/TrainData/MITPlace2Dataset/val_large'
-	baserecutpath = '/home/zzy/TrainData/MITPlace2Dataset/test/'
-	recutimage(basepath,baserecutpath)
+	baserecutpath = '/home/zzy/TrainData/MITPlace2Dataset/base500recut/'
+	recutimage(basepath,baserecutpath,500)
 	# imgshap = (512,680)
 	# for whitesize in [100,128,200]:
 	# 	outputpath = './center_mask_512x680_'+str(whitesize)+'.png'
