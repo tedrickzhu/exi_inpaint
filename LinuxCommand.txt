@@ -16,7 +16,8 @@ nohup python build_ds_f.py --dataset /home/zhengyi_zhu/TrainData/MITPlace2Datase
 相似图片配对,生成存储文件路径的TXT
 nohup python build_img_p.py --dataset /home/zhengyi_zhu/TrainData/MITPlace2Dataset/base5000recut/ --colorf /home/zhengyi_zhu/exi_inpaint/eximage/files/colorfeatures.csv --structf /home/zhengyi_zhu/exi_inpaint/eximage/files/structfeaturs.csv --imgfile /home/zhengyi_zhu/exi_inpaint/eximage/files/imgfile.txt --eximgfile /home/zhengyi_zhu/exi_inpaint/eximage/files/eximgfile.txt >output.log 2>&1 &
 
-
+#训练
+nohup python train.py >trainoutput.log 2>&1 &
 
 
 
