@@ -125,7 +125,7 @@ class GMCNNModel:
 
 
             # x_merge = tf.concat([x_b1, x_b2, x_b3, x_b4], axis=3)
-            x_merge = tf.concat([x_b1, x_b2, x_b3], axis=3)
+            x_merge = tf.concat([x_b1], axis=3)
 
             x = conv_3(inputs=x_merge, filters=cnum // 2, strides=1, name=b_names[4] + 'conv17')
             x = tf.layers.conv2d(inputs=x, kernel_size=3, filters=3, strides=1, activation=None, padding='SAME',
