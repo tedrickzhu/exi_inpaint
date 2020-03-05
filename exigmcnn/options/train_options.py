@@ -26,7 +26,7 @@ class TrainOptions:
         self.parser.add_argument('--load_model_dir', type=str, default='', help='pretrained models are given here')
         self.parser.add_argument('--model_prefix', type=str, default='snap', help='models are saved here')
 
-        self.parser.add_argument('--batch_size', type=int, default=16, help='input batch size')
+        self.parser.add_argument('--batch_size', type=int, default=8, help='input batch size')
 
         self.parser.add_argument('--random_mask', type=int, default=1)
         self.parser.add_argument('--mask_type', type=str, default='rect')
