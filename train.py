@@ -8,6 +8,8 @@ from exigmcnn.net.network import GMCNNModel
 from exigmcnn.data.data import DataLoader
 from exigmcnn.options.train_options import TrainOptions
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 config = TrainOptions().parse()
 
 model = GMCNNModel()
