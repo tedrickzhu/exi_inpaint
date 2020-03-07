@@ -18,4 +18,5 @@ restore/
 examples/
 files/
 imgs/
+test_results/
 imagenet-vgg-verydeep-19.mat

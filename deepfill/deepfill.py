@@ -18,50 +18,62 @@ generative_inpainting 说明：
 
 '''
 
-def cagc_inp(imagepath,maskpath,checkpointdir,outputpath):
-    FLAGS = ng.Config('inpaint.yml')
-    # ng.get_gpus(1)
-    # args, unknown = parser.parse_known_args()
+def deepfill_inpaint(imagepath,maskinfo,status,checkpointdir,inputimgpath,outputpath):
+	# basedata = BaseData()
+	# FLAGS = ng.Config(join(basedata.DEEPFILL_BASE_DIR,'inpaint.yml'))
+	FLAGS = ng.Config('./inpaint.yml')
+	# ng.get_gpus(1)
+	# args, unknown = parser.parse_known_args()
 
-    model = InpaintCAModel()
-    image = cv2.imread(imagepath)
-    mask = cv2.imread(maskpath)
-    print('thisisimgshape:',image.shape,mask.shape)
-    h, w, _ = image.shape
-    mask = cv2.resize(mask, (w,h), fx=0.5, fy=0.5)
-    print('thisisimgshape:',image.shape,mask.shape)
+	model = InpaintCAModel()
+	image = cv2.imread(imagepath)
+	h, w, _ = image.shape
+	if status==0:
+	    mask = np.zeros((h, w, 3)).astype(np.uint8)
+	    for rect in maskinfo:
+	        mask[rect[1]:rect[1] + rect[3], rect[0]:rect[0] + rect[2], :] = 255
+	else:
+	    mask = cv2.imread(maskinfo)
 
-    assert image.shape == mask.shape
-    #把原始图片划分成grid*grid个格子区域，'//'表示向下取整的除法
-    grid = 8
-    image = image[:h//grid*grid, :w//grid*grid, :]
-    mask = mask[:h//grid*grid, :w//grid*grid, :]
-    print('Shape of image: {}'.format(image.shape))
+	mask = cv2.resize(mask, (h,w), fx=0.5, fy=0.5)
+	assert image.shape == mask.shape
 
-    image = np.expand_dims(image, 0)
-    mask = np.expand_dims(mask, 0)
-    input_image = np.concatenate([image, mask], axis=2)
+	#把原始图片划分成grid*grid个格子区域，'//'表示向下取整的除法
+	grid = 8
+	image = image[:h//grid*grid, :w//grid*grid, :]
+	mask = mask[:h//grid*grid, :w//grid*grid, :]
+	print('Shape of image: {}'.format(image.shape))
 
-    sess_config = tf.ConfigProto()
-    sess_config.gpu_options.allow_growth = True
-    with tf.Session(config=sess_config) as sess:
-        input_image = tf.constant(input_image, dtype=tf.float32)
-        output = model.build_server_graph(FLAGS, input_image)
-        output = (output + 1.) * 127.5
-        output = tf.reverse(output, [-1])
-        output = tf.saturate_cast(output, tf.uint8)
-        # load pretrained model
-        vars_list = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
-        assign_ops = []
-        for var in vars_list:
-            vname = var.name
-            from_name = vname
-            var_value = tf.contrib.framework.load_variable(checkpointdir, from_name)
-            assign_ops.append(tf.assign(var, var_value))
-        sess.run(assign_ops)
-        print('Model loaded.')
-        result = sess.run(output)
-        cv2.imwrite(outputpath, result[0][:, :, ::-1])
+	inputimage = image * ((255 - mask)//255) + mask
+	cv2.imwrite(inputimgpath, inputimage.astype(np.uint8))
+
+	image = np.expand_dims(image, 0)
+	mask = np.expand_dims(mask, 0)
+	input_image = np.concatenate([image, mask], axis=2)
+
+	sess_config = tf.ConfigProto()
+	sess_config.gpu_options.allow_growth = True
+	deepfill_graph = tf.Graph()
+	with tf.Session(config=sess_config,graph=deepfill_graph) as deepfill_sess:
+	    input_image = tf.constant(input_image, dtype=tf.float32)
+	    output = model.build_server_graph(FLAGS, input_image)
+	    output = (output + 1.) * 127.5
+	    output = tf.reverse(output, [-1])
+	    output = tf.saturate_cast(output, tf.uint8)
+	    # load pretrained model
+	    vars_list = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
+	    assign_ops = []
+	    for var in vars_list:
+	        vname = var.name
+	        from_name = vname
+	        var_value = tf.contrib.framework.load_variable(checkpointdir, from_name)
+	        assign_ops.append(tf.assign(var, var_value))
+	    deepfill_sess.run(assign_ops)
+	    print('deepfill Model loaded.')
+	    result = deepfill_sess.run(output)
+	    cv2.imwrite(outputpath, result[0][:, :, ::-1])
+	    deepfill_sess.close()
+
 
 def cagc_inp_batch():
     baserecutpath = '/home/zzy/TrainData/MITPlace2Dataset/val_recut_512x680'
@@ -124,10 +136,10 @@ def cagc_inp_batch():
             cv2.imwrite(outputpath, result[0][:, :, ::-1])
 
 
-def ceshi():
+def ceshi2():
     pretrained_models={
-        "celebahq":"./checkpoints/celebahq_256",
-        "places2":"./checkpoints/places2_512x680"
+        "celebahq":"./checkpoints/deepfill_celebahq_256",
+        "places2":"./checkpoints/deepfill_places2_256"
     }
     checkpointdir=pretrained_models["places2"]
 
@@ -137,10 +149,26 @@ def ceshi():
     # image = cv2.imread(imagepath)
     # mask = cv2.imread(maskpath)
     # print(image.shape,mask.shape)
-    cagc_inp(imagepath, maskpath, checkpointdir, outputpath)
+    # cagc_inp(imagepath, maskpath, checkpointdir, outputpath)
+
+    print("this is done")
+
+def ceshi():
+    pretrained_models={
+        "celebahq":"../checkpoints/deepfill_celebahq_256",
+        "places2":"../checkpoints/deepfill_places2_256"
+    }
+    checkpointdir=pretrained_models["celebahq"]
+    inputimgpath = "./tmp_deepfill/input000.png"
+    outputpath="./tmp_deepfill/ceshioutput8.png"
+    imagepath = "../App/static/images/celeba_256x256/001.png"
+    maskpath="../App/static/images/maskimg/center_mask_256.png"
+    # image = cv2.imread(imagepath)
+    # mask = cv2.imread(maskpath)
+    # print(image.shape,mask.shape)
+    deepfill_inpaint(imagepath, maskpath,1, checkpointdir, inputimgpath,outputpath)
 
     print("this is done")
 
 if __name__ == '__main__':
-    # ceshi()
-    cagc_inp_batch()
+    ceshi()
