@@ -8,8 +8,9 @@ import numpy as np
 '''
 this method is only use for MIT place2 dataset val_large sub-dataset
 you can change it use glob to make it as a common method
+#imgsize = (w,h)
 '''
-def recutimage(basepath,baserecutpath,readnums=0):
+def recutimage(basepath,baserecutpath,readnums=0,imgsize=(256,256)):
 	if readnums==0:
 		readnums = 10000000
 	if not os.path.exists(baserecutpath):
@@ -31,19 +32,19 @@ def recutimage(basepath,baserecutpath,readnums=0):
 		# print(filepath)
 		image = cv2.imread(filepath)
 		h,w,c = image.shape
-		rate = 512.0/680.0
+		rate = (imgsize[1]*1.0)/(imgsize[0]*1.0)
 		if (h*1.0)/(w*1.0) > rate:
 			h_new = int(w*rate)
 
 			image_new = image[:h_new,:,:]
-			image_new = cv2.resize(image_new, (680, 512))
+			image_new = cv2.resize(image_new, imgsize)
 			filename = 'Places365_' + str(writeindex).zfill(8) + '.png'
 			filepath = os.path.join(baserecutpath, filename)
 			cv2.imwrite(filepath,image_new)
 			writeindex+=1
 
 			image_new = image[h-h_new:,:,:]
-			image_new = cv2.resize(image_new, (680, 512))
+			image_new = cv2.resize(image_new, imgsize)
 			filename = 'Places365_' + str(writeindex).zfill(8) + '.png'
 			filepath = os.path.join(baserecutpath, filename)
 			cv2.imwrite(filepath, image_new)
@@ -52,14 +53,14 @@ def recutimage(basepath,baserecutpath,readnums=0):
 			if float(h-h_new)/float(h) > 0.3:
 				h_new_s = int(h_new*0.3)
 				image_new = image[h_new_s:(h_new_s+h_new), :, :]
-				image_new = cv2.resize(image_new, (680, 512))
+				image_new = cv2.resize(image_new, imgsize)
 				filename = 'Places365_' + str(writeindex).zfill(8) + '.png'
 				filepath = os.path.join(baserecutpath, filename)
 				cv2.imwrite(filepath, image_new)
 				writeindex += 1
 				h_new_s = int(h-h_new * 1.3)
 				image_new = image[h_new_s:(h_new_s + h_new), :, :]
-				image_new = cv2.resize(image_new, (680, 512))
+				image_new = cv2.resize(image_new, imgsize)
 				filename = 'Places365_' + str(writeindex).zfill(8) + '.png'
 				filepath = os.path.join(baserecutpath, filename)
 				cv2.imwrite(filepath, image_new)
@@ -69,14 +70,14 @@ def recutimage(basepath,baserecutpath,readnums=0):
 			w_new = int(h / rate)
 
 			image_new = image[:, :w_new, :]
-			image_new = cv2.resize(image_new,(680,512))
+			image_new = cv2.resize(image_new,imgsize)
 			filename = 'Places365_' + str(writeindex).zfill(8) + '.png'
 			filepath = os.path.join(baserecutpath, filename)
 			cv2.imwrite(filepath, image_new)
 			writeindex += 1
 
 			image_new = image[:, w - w_new:, :]
-			image_new = cv2.resize(image_new,(680,512))
+			image_new = cv2.resize(image_new,imgsize)
 			filename = 'Places365_' + str(writeindex).zfill(8) + '.png'
 			filepath = os.path.join(baserecutpath, filename)
 			cv2.imwrite(filepath, image_new)
@@ -84,21 +85,21 @@ def recutimage(basepath,baserecutpath,readnums=0):
 			if float(w-w_new)/float(w) > 0.3:
 				w_new_s = int(w*0.3)
 				image_new = image[ :,w_new_s:(w_new_s+w_new), :]
-				image_new = cv2.resize(image_new, (680, 512))
+				image_new = cv2.resize(image_new, imgsize)
 				filename = 'Places365_' + str(writeindex).zfill(8) + '.png'
 				filepath = os.path.join(baserecutpath, filename)
 				cv2.imwrite(filepath, image_new)
 				writeindex += 1
 				w_new_s = int(w-w_new * 1.3)
 				image_new = image[:, w_new_s:(w_new_s + w_new), :]
-				image_new = cv2.resize(image_new, (680, 512))
+				image_new = cv2.resize(image_new, imgsize)
 				filename = 'Places365_' + str(writeindex).zfill(8) + '.png'
 				filepath = os.path.join(baserecutpath, filename)
 				cv2.imwrite(filepath, image_new)
 				writeindex += 1
 
 		elif (h*1.0)/(w*1.0) == rate:
-			image_new = cv2.resize(image,(680,512))
+			image_new = cv2.resize(image,imgsize)
 			filename = 'Places365_' + str(writeindex).zfill(8) + '.png'
 			filepath = os.path.join(baserecutpath, filename)
 			cv2.imwrite(filepath, image_new)
@@ -127,8 +128,10 @@ def create_mask(imgshap,whitesize,outputpath):
 
 if __name__ == '__main__':
 	basepath = '/home/zzy/TrainData/MITPlace2Dataset/val_large'
-	baserecutpath = '/home/zzy/TrainData/MITPlace2Dataset/base500recut/'
-	recutimage(basepath,baserecutpath,500)
+	baserecutpath = '/home/zzy/TrainData/MITPlace2Dataset/base1000recut/'
+
+	# imgsize=(256,256)
+	recutimage(basepath,baserecutpath,1000)
 	# imgshap = (512,680)
 	# for whitesize in [100,128,200]:
 	# 	outputpath = './center_mask_512x680_'+str(whitesize)+'.png'

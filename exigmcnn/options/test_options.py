@@ -8,11 +8,17 @@ class TestOptions:
         self.initialized = False
 
     def initialize(self):
-        self.parser.add_argument('--dataset', type=str, default='paris_streetview',
-                                 help='The dataset of the experiment.')
-        self.parser.add_argument('--data_file', type=str, default='./imgs/paris-streetview_256x256', help='the file storing testing file paths')
+        # self.parser.add_argument('--dataset', type=str, default='paris_streetview',
+        #                          help='The dataset of the experiment.')
+        # self.parser.add_argument('--data_file', type=str, default='./imgs/paris-streetview_256x256', help='the file storing testing file paths')
+        self.parser.add_argument('--dataset', type=str, default='places2', help='The dataset of the experiment.')
+        self.parser.add_argument('--data_imgfile', type=str, default='./eximage/files/b500imgfile_t10.txt',
+                                 help='the file storing training file paths')
+        self.parser.add_argument('--data_eximgfile', type=str, default='./eximage/files/b500eximgfile_t10.txt',
+                                 help='the file storing training file paths')
+
         self.parser.add_argument('--test_dir', type=str, default='./test_results', help='models are saved here')
-        self.parser.add_argument('--load_model_dir', type=str, default='./checkpoints/paris-streetview_256x256_rect', help='pretrained models are given here')
+        self.parser.add_argument('--load_model_dir', type=str, default='./checkpoints/b500-c1000/', help='pretrained models are given here')
         self.parser.add_argument('--model_prefix', type=str, default='snap')
         self.parser.add_argument('--seed', type=int, default=1, help='random seed')
 
@@ -39,8 +45,8 @@ class TestOptions:
             self.initialize()
         self.opt = self.parser.parse_args()
 
-        if self.opt.data_file != '':
-            self.opt.dataset_path = self.opt.data_file
+        # if self.opt.data_file != '':
+        #     self.opt.dataset_path = self.opt.data_file
 
         if os.path.exists(self.opt.test_dir) is False:
             os.mkdir(self.opt.test_dir)

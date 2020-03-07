@@ -20,7 +20,7 @@ nohup python -u build_ds_f.py --dataset /home/zhengyi_zhu/TrainData/MITPlace2Dat
 nohup python -u build_img_p.py --dataset /home/zhengyi_zhu/TrainData/MITPlace2Dataset/base5000recut/ --colorf /home/zhengyi_zhu/exi_inpaint/eximage/files/colorfeatures.csv --structf /home/zhengyi_zhu/exi_inpaint/eximage/files/structfeaturs.csv --imgfile /home/zhengyi_zhu/exi_inpaint/eximage/files/imgfile.txt --eximgfile /home/zhengyi_zhu/exi_inpaint/eximage/files/eximgfile.txt >output.log 2>&1 &
 
 #训练
-nohup python -u train.py --gpu_ids 0,1 >trainoutput.log 2>&1 &
+nohup python -u train.py --gpu_ids 0 --max_iters 40000 --batch_size 2 >trainoutput.log 2>&1 &
 
 
 

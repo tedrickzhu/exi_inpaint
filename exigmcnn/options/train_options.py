@@ -19,8 +19,8 @@ class TrainOptions:
 
     def initialize(self):
         self.parser.add_argument('--dataset', type=str, default='places2', help='The dataset of the experiment.')
-        self.parser.add_argument('--data_imgfile', type=str, default='./eximage/files/b500imgfile.txt', help='the file storing training file paths')
-        self.parser.add_argument('--data_eximgfile', type=str, default='./eximage/files/b500eximgfile.txt', help='the file storing training file paths')
+        self.parser.add_argument('--data_imgfile', type=str, default='./eximage/files/b1000imgfile.txt', help='the file storing training file paths')
+        self.parser.add_argument('--data_eximgfile', type=str, default='./eximage/files/b1000eximgfile.txt', help='the file storing training file paths')
         self.parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0')
         self.parser.add_argument('--checkpoints_dir', type=str, default='./checkpoints', help='models are saved here')
         self.parser.add_argument('--load_model_dir', type=str, default='', help='pretrained models are given here')
@@ -41,10 +41,10 @@ class TrainOptions:
         self.parser.add_argument('--lr', type=float, default=1e-5, help='learning rate for training')
 
         self.parser.add_argument('--train_spe', type=int, default=1000)
-        self.parser.add_argument('--max_iters', type=int, default=10000)
+        self.parser.add_argument('--max_iters', type=int, default=20000)
         self.parser.add_argument('--viz_steps', type=int, default=5)
 
-        self.parser.add_argument('--img_shapes', type=str, default='512,680,3',
+        self.parser.add_argument('--img_shapes', type=str, default='256,256,3',
                                  help='given shape parameters: h,w,c or h,w')
         self.parser.add_argument('--mask_shapes', type=str, default='128,128',
                                  help='given mask parameters: h,w')
@@ -100,7 +100,7 @@ class TrainOptions:
         self.opt.model_name = 'GMCNN'
         self.opt.model_folder = self.opt.date_str + '_' + self.opt.model_name
         self.opt.model_folder += '_' + self.opt.dataset
-        self.opt.model_folder += '_b' + str(self.opt.batch_size)
+        self.opt.model_folder += '_bs' + str(self.opt.batch_size)
         self.opt.model_folder += '_s' + str(self.opt.img_shapes[0]) + 'x' + str(self.opt.img_shapes[1])
         self.opt.model_folder += '_gc' + str(self.opt.g_cnum)
         self.opt.model_folder += '_dc' + str(self.opt.d_cnum)

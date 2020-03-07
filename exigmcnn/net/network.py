@@ -323,13 +323,14 @@ class GMCNNModel:
             tf.GraphKeys.TRAINABLE_VARIABLES, 'discriminator')
         return g_vars, d_vars, losses
 
-    def evaluate(self, im, mask, config, reuse=False):
+    def evaluate(self, img, eximg,mask, config, reuse=False):
         # generate mask, 1 represents masked point
         self.config = config
-        im = im / 127.5 - 1
-        im = im * (1 - mask)
+        img = img / 127.5 - 1
+        eximg = eximg / 127.5 - 1
+        img = img * (1 - mask)
         # inpaint
-        batch_predict = self.build_generator(im, mask, reuse=reuse)
+        batch_predict = self.build_generator(img, eximg,mask, reuse=reuse)
         # apply mask and reconstruct
-        batch_complete = batch_predict * mask + im * (1 - mask)
+        batch_complete = batch_predict * mask + img * (1 - mask)
         return batch_complete
