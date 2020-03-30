@@ -19,4 +19,5 @@ examples/
 files/
 imgs/
 test_results/
+outputlog/
 imagenet-vgg-verydeep-19.mat
