@@ -23,10 +23,10 @@ class TrainOptions:
         self.parser.add_argument('--data_eximgfile', type=str, default='./eximage/files/eximgfile330.txt', help='the file storing training file paths')
         self.parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0')
         self.parser.add_argument('--checkpoints_dir', type=str, default='./checkpoints', help='models are saved here')
-        self.parser.add_argument('--load_model_dir', type=str, default='./checkpoints/0314/', help='pretrained models are given here')
+        self.parser.add_argument('--load_model_dir', type=str, default='./checkpoints/0315/', help='pretrained models are given here')
         self.parser.add_argument('--model_prefix', type=str, default='snap', help='models are saved here')
 
-        self.parser.add_argument('--batch_size', type=int, default=2, help='input batch size')
+        self.parser.add_argument('--batch_size', type=int, default=8, help='input batch size')
 
         self.parser.add_argument('--random_mask', type=int, default=1)
         self.parser.add_argument('--mask_type', type=str, default='rect')
