@@ -98,6 +98,6 @@ with tf.Session(config=sess_config) as sess:
         mask = np.expand_dims(mask, 0)
 
         result = sess.run(output, feed_dict={input_image_tf: image, input_eximage_tf:eximage, input_mask_tf: mask})
-        cv2.imwrite(os.path.join(config.saving_path, '{:03d}.png'.format(i)), result[0][:, :, ::-1])
+        cv2.imwrite(os.path.join(config.saving_path, os.path.basename(imgpathfile[i])), result[0][:, :, ::-1])
         print(' > {} / {}'.format(i+1, test_num))
 print('done.')

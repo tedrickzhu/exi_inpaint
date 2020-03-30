@@ -90,12 +90,13 @@ def get_img_pair(parameters):
 
 if __name__ == '__main__':
 	# dataset = '/home/zzy/work/exi_inpaint/imgs/places2_512x680/'
-	dataset = '/home/zzy/TrainData/MITPlace2Dataset/base1000recut/'
+	fdbdir = '/home/zzy/TrainData/MITPlace2Dataset/base1000recut/'
+	dataset = '/home/zzy/TrainData/MITPlace2Dataset/b1000test20/'
 	# dataset = '/home/zzy/work/experiment_image_inpaint/searcher/examples/output/'
 	# dataset = "/home/zzy/TrainData/HolidaySet/"
 	colorIndexPath = "/home/zzy/work/exi_inpaint/eximage/files/b1000colorfeatures.csv"
 	structureIndexPath = "/home/zzy/work/exi_inpaint/eximage/files/b1000strucfeatures.csv"
-	imgfile = "/home/zzy/work/exi_inpaint/eximage/files/b1000imgfile.txt"
-	eximgfile = "/home/zzy/work/exi_inpaint/eximage/files/b1000eximgfile.txt"
-	buildimgpairs(dataset, colorIndexPath, structureIndexPath, imgfile,eximgfile)
+	imgfile = "/home/zzy/work/exi_inpaint/eximage/files/b1k_t20imgfile2.txt"
+	eximgfile = "/home/zzy/work/exi_inpaint/eximage/files/b1k_t20eximgfile2.txt"
+	buildimgpairs(dataset, colorIndexPath, structureIndexPath, imgfile,eximgfile,fdbdir)
 	print('build image pairs done.')

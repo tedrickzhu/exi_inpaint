@@ -12,13 +12,13 @@ class TestOptions:
         #                          help='The dataset of the experiment.')
         # self.parser.add_argument('--data_file', type=str, default='./imgs/paris-streetview_256x256', help='the file storing testing file paths')
         self.parser.add_argument('--dataset', type=str, default='places2', help='The dataset of the experiment.')
-        self.parser.add_argument('--data_imgfile', type=str, default='./eximage/files/b500imgfile_t10.txt',
+        self.parser.add_argument('--data_imgfile', type=str, default='./eximage/files/b500_256imgfile.txt',
                                  help='the file storing training file paths')
-        self.parser.add_argument('--data_eximgfile', type=str, default='./eximage/files/b500eximgfile_t10.txt',
+        self.parser.add_argument('--data_eximgfile', type=str, default='./eximage/files/b500_256eximgfile.txt',
                                  help='the file storing training file paths')
 
         self.parser.add_argument('--test_dir', type=str, default='./test_results', help='models are saved here')
-        self.parser.add_argument('--load_model_dir', type=str, default='./checkpoints/b500-c1000/', help='pretrained models are given here')
+        self.parser.add_argument('--load_model_dir', type=str, default='./checkpoints/0314/', help='pretrained models are given here')
         self.parser.add_argument('--model_prefix', type=str, default='snap')
         self.parser.add_argument('--seed', type=int, default=1, help='random seed')
 
@@ -28,7 +28,7 @@ class TestOptions:
 
         self.parser.add_argument('--img_shapes', type=str, default='256,256,3',
                                  help='given shape parameters: h,w,c or h,w')
-        self.parser.add_argument('--mask_shapes', type=str, default='128,128',
+        self.parser.add_argument('--mask_shapes', type=str, default='100,100',
                                  help='given mask parameters: h,w')
         self.parser.add_argument('--mask_type', type=str, default='rect')
         self.parser.add_argument('--test_num', type=int, default=-1)

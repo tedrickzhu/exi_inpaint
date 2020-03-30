@@ -46,7 +46,7 @@ class TrainOptions:
 
         self.parser.add_argument('--img_shapes', type=str, default='256,256,3',
                                  help='given shape parameters: h,w,c or h,w')
-        self.parser.add_argument('--mask_shapes', type=str, default='128,128',
+        self.parser.add_argument('--mask_shapes', type=str, default='100,100',
                                  help='given mask parameters: h,w')
         self.parser.add_argument('--max_delta_shapes', type=str, default='32,32')
         self.parser.add_argument('--margins', type=str, default='0,0')
