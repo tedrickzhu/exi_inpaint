@@ -10,7 +10,7 @@ this method is only use for MIT place2 dataset val_large sub-dataset
 you can change it use glob to make it as a common method
 #imgsize = (w,h)
 '''
-def recutimage(basepath,baserecutpath,readnums=0,imgsize=(256,256),imgfilepath='./imgfile.txt',eximgfilepath='./eximgfile.txt'):
+def recutimage(basepath,baserecutpath,readnums=0,imgsize=(256,256),imgfilepath='./imgfile330.txt',eximgfilepath='./eximgfile330.txt'):
 	if readnums==0:
 		readnums = 10000000
 	if not os.path.exists(baserecutpath):
@@ -141,6 +141,7 @@ def recutimage(basepath,baserecutpath,readnums=0,imgsize=(256,256),imgfilepath='
 					imgfile.write(str(imgpath2))
 					imgfile.write('\r\n')
 					eximgfile.write(str(imgpath1))
+					eximgfile.write('\r\n')
 
 				if writeindex-precount>500:
 					precount=writeindex
@@ -161,8 +162,8 @@ def create_mask(imgshap,whitesize,outputpath):
 
 
 if __name__ == '__main__':
-	basepath = '/home/zzy/TrainData/MITPlace2Dataset/val_large'
-	baserecutpath = '/home/zzy/TrainData/MITPlace2Dataset/base1000recut330/'
+	basepath = '/home/zhengyi_zhu/TrainData/MITPlace2Dataset/val_large'
+	baserecutpath = '/home/zhengyi_zhu/TrainData/MITPlace2Dataset/base1000recut330/'
 
 	# imgsize=(256,256)
 	recutimage(basepath,baserecutpath,1000)
