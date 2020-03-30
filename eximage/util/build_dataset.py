@@ -161,8 +161,8 @@ def create_mask(imgshap,whitesize,outputpath):
 
 
 if __name__ == '__main__':
-	basepath = '/home/zzy/TrainData/MITPlace2Dataset/val_large'
-	baserecutpath = '/home/zzy/TrainData/MITPlace2Dataset/base1000recut330/'
+	basepath = '/home/zhengyi_zhu/TrainData/MITPlace2Dataset/val_large'
+	baserecutpath = '/home/zhengyi_zhu/TrainData/MITPlace2Dataset/base1000recut330/'
 
 	# imgsize=(256,256)
 	recutimage(basepath,baserecutpath,1000)
