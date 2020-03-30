@@ -35,7 +35,7 @@ class DataLoader:
             im_gt.set_shape([self.im_size[0], self.im_size[1], 3])
             exim_gt.set_shape([self.im_size[0], self.im_size[1], 3])
 
-            ttbatch_gt = tf.train.batch([im_gt], batch_size=self.batch_size, num_threads=4)
+            # ttbatch_gt = tf.train.batch([im_gt], batch_size=self.batch_size, num_threads=4)
 
             batch_gt = tf.train.batch([im_gt,exim_gt], batch_size=self.batch_size, num_threads=4)
         return batch_gt

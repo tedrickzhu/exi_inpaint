@@ -22,7 +22,7 @@ nohup python -u build_img_p.py --dataset /home/zhengyi_zhu/TrainData/MITPlace2Da
 #训练
 nohup python -u train.py --gpu_ids 1  --data_imgfile ./eximage/files/b500imgfile.txt --data_eximgfile ./eximage/files/b500imgfile.txt --max_iters 40000 --batch_size 2 >trainoutput.log 2>&1 &
 
-nohup python -u train.py --gpu_ids 0 --max_iters 10000 --lr 0.0001 --mask_shapes 100,100 --load_model_dir ./checkpoints/0314/ --batch_size 8 >330trainoutput.log 2>&1 &
+nohup python -u train.py --gpu_ids 0 --max_iters 10000 --lr 0.0001 --mask_shapes 100,100 --load_model_dir ./checkpoints/0315/ --batch_size 8 >./outputlog/330trainoutput.log 2>&1 &
 
 
 
