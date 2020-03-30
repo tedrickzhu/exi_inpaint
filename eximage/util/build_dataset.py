@@ -149,7 +149,7 @@ def recutimage(basepath,baserecutpath,readnums=0,imgsize=(256,256),imgfilepath='
 
 	print('======recut images finished======')
 	print('have read source images numbers:', readindex)
-	print('have written recutted image numbers:', writeindex)
+	print('have written recutted image numbers:', writeindex-1)
 
 def create_mask(imgshap,whitesize,outputpath):
 	h,w = imgshap[0],imgshap[1]
